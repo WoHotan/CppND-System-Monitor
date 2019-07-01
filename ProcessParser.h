@@ -119,3 +119,14 @@ string ProcessParser::getCpuPercent(string pid) {
     result = 100.0 * ((total_time/freq)/ seconds);
     return to_string(result);
 }
+
+long int ProcessParser::getSysUpTime() {
+    string line;
+    ifstream stream = Util::getStream((Path::basePath + Path::upTimePath()));
+    getline(stream, line);
+    istringstream buf(line);
+    istream_iterator<string> beg(buf), end;
+    vector<string> values(beg, end);
+    return stoi(values[0]);
+}
+
