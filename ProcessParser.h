@@ -143,3 +143,30 @@ std::string ProcessParser::getProcUpTime(string pid) {
     // Using sysconf to get clock ticks of the host machine
     return to_string(float(stof(values[13]) / sysconf(_SC_CLK_TCK)));
 }
+
+string getProcUser(string pid) {
+    string line;
+    string name = "Uid:";
+    string result = "";
+    ifstream stream = Util::getStream((Path::basePath + pid + + pid + Path::statusPath()));
+    //Getting UID for user
+    while (std::getline(stream, line)) {
+        if (line.compare(0, name.size(), name) == 0) {
+            istringstream buf(line);
+            istream_iterator<string> beg(buf), end;
+            vector<string> values(beg, end);
+            result = values[1];
+            break;
+        }
+    }
+    stream = Util::getStream("/etc/passwd");
+    name = ("x:" + result);
+    //Searching for name of the user with select UID
+    while(getline(stream, line)) {
+        if (line.find(name) != std::string::npos) {
+            result = line.substr(0, line.find(":"));
+            return result;
+        }
+    }
+    return "";
+}
