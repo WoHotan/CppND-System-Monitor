@@ -327,3 +327,20 @@ int ProcessParser::getTotalNumberOfProcesses() {
     }
     return result;
 }
+
+int ProcessParser::getNumberOfRunningProcesses() {
+    string line;
+    int result = 0;
+    string name = "procs_running";
+    ifstream stream = Util::getStream((Path::basePath() + Path::statPath()));
+    while (std::getline(stream, line)) {
+        if (line.compare(0, name.size(), name) == 0) {
+            istringstream buf(line);
+            istream_iterator<string> beg(buf), end;
+            vector<string> values(beg, end);
+            result += stoi(values[1]);
+            break;
+        }
+    }
+    return result;
+}
