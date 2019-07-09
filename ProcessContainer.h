@@ -1,5 +1,6 @@
 #include "Process.h"
 #include <vector>
+#include <string>
 class ProcessContainer{
 
 private:

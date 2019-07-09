@@ -17,7 +17,7 @@
 #include <time.h>
 #include <unistd.h>
 #include "constants.h"
-
+#include "util.h"
 
 using namespace std;
 
@@ -47,7 +47,7 @@ private:
 // TODO: Define all of the above functions below:
 string ProcessParser::getCmd(string pid) {
     string line;
-    ifstream stream = Util::getStream((Path::basePath() + pid + Path::cmdPath()));
+    ifstream stream = Util::getStream(Path::basePath() + pid + Path::cmdPath());
     std::getline(stream, line);
     return line;
 }
@@ -83,7 +83,7 @@ string ProcessParser::getVmSize(string pid) {
     ifstream stream = Util::getStream((Path::basePath() + pid + Path::statusPath()));
     while(std::getline(stream, line)) {
         //Searching line by line
-        if(line.compare(0, name.size(),name) == 0)) {
+        if(line.compare(0, name.size(),name) == 0) {
             // slicing string line on ws for values using sstream
             istringstream buf(line);
             istream_iterator<string> beg(buf), end;
@@ -100,7 +100,7 @@ string ProcessParser::getCpuPercent(string pid) {
     string line;
     string value;
     float result;
-    ifstream stream = Util::getStream((Path::basePath + pid + + "/" + Path::statPath()));
+    ifstream stream = Util::getStream((Path::basePath() + pid + + "/" + Path::statPath()));
     getline(stream, line);
     string str = line;
     istringstream buf(str);
@@ -110,7 +110,7 @@ string ProcessParser::getCpuPercent(string pid) {
     float utime = stof(ProcessParser::getProcUpTime(pid));
     float stime = stof(values[14]);
     float cutime = stof(values[15]);
-    float cstime = stof(vlaues[16]);
+    float cstime = stof(values[16]);
     float starttime = stof(values[21]);
     float uptime = ProcessParser::getSysUpTime();
     float freq = sysconf(_SC_CLK_TCK);
@@ -122,7 +122,7 @@ string ProcessParser::getCpuPercent(string pid) {
 
 long int ProcessParser::getSysUpTime() {
     string line;
-    ifstream stream = Util::getStream((Path::basePath + Path::upTimePath()));
+    ifstream stream = Util::getStream((Path::basePath() + Path::upTimePath()));
     getline(stream, line);
     istringstream buf(line);
     istream_iterator<string> beg(buf), end;
@@ -134,7 +134,7 @@ std::string ProcessParser::getProcUpTime(string pid) {
     string line;
     string value;
     float result;
-    ifstream stream = Util::getStream((Path::basePath + pid + + "/" +  Path::statPath()));
+    ifstream stream = Util::getStream((Path::basePath() + pid + + "/" +  Path::statPath()));
     getline(stream, line);
     string str = line;
     istringstream buf(str);
@@ -148,7 +148,7 @@ string ProcessParser::getProcUser(string pid) {
     string line;
     string name = "Uid:";
     string result = "";
-    ifstream stream = Util::getStream((Path::basePath + pid + + pid + Path::statusPath()));
+    ifstream stream = Util::getStream((Path::basePath() + pid + Path::statusPath()));
     //Getting UID for user
     while (std::getline(stream, line)) {
         if (line.compare(0, name.size(), name) == 0) {
