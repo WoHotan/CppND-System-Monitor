@@ -18,7 +18,7 @@ long minutes = input_seconds / 60;
 long hours = minutes / 60;
 long seconds = int(input_seconds%60);
 minutes = int(minutes%60);
-string result = to_string(hours) + ":" + to_string(minutes) + ":" + to_string(seconds);
+string result = std::to_string(hours) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
 return result;
 }
 // constructing string for given percentage
@@ -52,7 +52,7 @@ string Util::getProgressBar(string percent){
 ifstream Util::getStream(string path){
     ifstream stream(path);
     if (!stream){
-        throw runtime_error("Non - existing PID");
+        throw std::runtime_error("Non - existing PID");
     }
     return stream;
 }
