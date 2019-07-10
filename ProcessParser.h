@@ -359,3 +359,7 @@ int ProcessParser::getNumberOfCores() {
     return 0;
 }
 
+bool ProcessParser::isPidExisting(string pid) {
+    vector<string> pidList = ProcessParser::getPidList();
+    return std::find(pidList.begin(), pidList.end(), pid) != pidList.end();
+}
