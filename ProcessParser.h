@@ -353,7 +353,7 @@ int ProcessParser::getNumberOfCores() {
             istringstream buf(line);
             istream_iterator<string> beg(buf), end;
             vector<string> values(beg, end);
-            result += stoi(values[3]);
+            return stoi(values[3]);
         }
     }
     return 0;
