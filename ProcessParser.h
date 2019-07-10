@@ -17,7 +17,6 @@
 #include <time.h>
 #include <unistd.h>
 #include "constants.h"
-#include "util.h"
 
 using namespace std;
 
@@ -89,7 +88,7 @@ string ProcessParser::getVmSize(string pid) {
             istream_iterator<string> beg(buf), end;
             vector<string> values(beg, end);
             //conversion kB-> GB
-            result = (stof(vlaues[1]) / float(1024 * 1024))
+            result = (stof(values[1]) / float(1024 * 1024));
             break;
         }
     }
@@ -171,7 +170,7 @@ string ProcessParser::getProcUser(string pid) {
     return "";
 }
 
-vector<string> ProcessParser::getSysCpuPercent(string coreNumber = "") {
+vector<string> ProcessParser::getSysCpuPercent(string coreNumber) {
     // It is possible to use this method for selection of data for overall cpu or every core.
     // when nothing is passed "cpu" line is read
     // when, for example "0" is passed  -> "cpu0" -> data for first core is read
@@ -344,3 +343,19 @@ int ProcessParser::getNumberOfRunningProcesses() {
     }
     return result;
 }
+
+int ProcessParser::getNumberOfCores() {
+    string line;
+    string name = "cpu cores";
+    ifstream stream = Util::getStream((Path::basePath() + "cpuinfo"));
+    while (std::getline(stream, line)) {
+        if (line.compare(0, name.size(), name) == 0) {
+            istringstream buf(line);
+            istream_iterator<string> beg(buf), end;
+            vector<string> values(beg, end);
+            result += stoi(values[3]);
+        }
+    }
+    return 0;
+}
+
